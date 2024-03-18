@@ -1,4 +1,5 @@
 -- data definition
+-- schema based on Spring Security reference docs: https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/jdbc.html#servlet-authentication-jdbc-schema-user
 CREATE TABLE users (
     id       BIGINT          AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50)  NOT NULL UNIQUE,

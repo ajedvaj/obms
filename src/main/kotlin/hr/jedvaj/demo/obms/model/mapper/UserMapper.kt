@@ -5,9 +5,9 @@ import hr.jedvaj.demo.obms.model.response.UserResponse
 import org.mapstruct.Mapper
 
 @Mapper(componentModel = "spring")
-abstract class UserMapper {
+interface UserMapper {
 
-    abstract fun toDto(user: User?): UserResponse?
-    abstract fun toDtoList(userList: List<User>): List<UserResponse>
+    fun toDto(user: User?): UserResponse?
+    fun toDtoList(userList: List<User>): List<UserResponse>
 
 }

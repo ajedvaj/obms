@@ -34,8 +34,13 @@ dependencies {
 	kapt("org.mapstruct:mapstruct-processor:1.5.2.Final")
 
 	runtimeOnly("com.h2database:h2")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+		exclude("org.junit.vintage", "org.junit.vintage")
+		exclude("org.mockito", "mockito-core")
+	}
 	testImplementation("org.springframework.security:spring-security-test")
+	testImplementation("org.junit.jupiter:junit-jupiter-engine:5.10.2")
+	testImplementation("com.ninja-squad:springmockk:3.0.1")
 }
 
 kapt {
