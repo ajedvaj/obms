@@ -30,7 +30,7 @@ class BookService(val bookRepository: BookRepository, val bookMapper: BookMapper
         val entity = bookRepository.findByIdOrNull(id) ?: return null
 
         val updatedEntity = bookMapper.toEntity(bookReq)
-        updatedEntity.id = entity?.id
+        updatedEntity.id = entity.id
 
         val result = bookRepository.save(updatedEntity)
         return bookMapper.toDto(result)

@@ -1,6 +1,8 @@
 package hr.jedvaj.demo.obms.service
 
 import hr.jedvaj.demo.obms.config.SecurityRoles
+import hr.jedvaj.demo.obms.model.entity.Authority
+import hr.jedvaj.demo.obms.model.entity.User
 import hr.jedvaj.demo.obms.model.mapper.UserMapper
 import hr.jedvaj.demo.obms.model.request.UserCreateRequest
 import hr.jedvaj.demo.obms.model.request.UserUpdateRequest
@@ -17,7 +19,8 @@ class UserService(
     val userRepository: UserRepository,
     val userMapper: UserMapper,
     val userDetailsManager: UserDetailsManager,
-    val passwordEncoder: PasswordEncoder
+    val passwordEncoder: PasswordEncoder,
+    val authorityService: AuthorityService
 ) {
 
     fun getAll(): List<UserResponse> {
@@ -31,16 +34,16 @@ class UserService(
     }
 
     fun create(userCreateRequest: UserCreateRequest): UserResponse? {
-        // create user with SpringSecurity UserDetailsManager
-        val authorities = listOf(SimpleGrantedAuthority(SecurityRoles.ROLE_USER.name))
+
         val password = passwordEncoder.encode(userCreateRequest.password?.trim())
-        val user =
-            org.springframework.security.core.userdetails.User(userCreateRequest.username, password, authorities)
-        userDetailsManager.createUser(user)
+        val user = User(userCreateRequest.username, password)
 
+        val entity = userRepository.save(user)
+        val future = authorityService.createForUser(user.username)
+        future.thenAccept {
+            println("For demo purpose AuthorityService uses @Async")
+        }
 
-        // load it with JPA
-        val entity = userRepository.findByUsername(user.username)
         return userMapper.toDto(entity)
     }
 

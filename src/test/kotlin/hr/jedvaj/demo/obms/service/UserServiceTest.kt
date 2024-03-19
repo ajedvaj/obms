@@ -1,5 +1,6 @@
 package hr.jedvaj.demo.obms.service
 
+import hr.jedvaj.demo.obms.model.entity.Authority
 import hr.jedvaj.demo.obms.model.entity.User
 import hr.jedvaj.demo.obms.model.mapper.UserMapper
 import hr.jedvaj.demo.obms.model.mapper.UserMapperImpl
@@ -16,15 +17,16 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.UserDetailsManager
+import java.util.concurrent.CompletableFuture
 
 class UserServiceTest {
 
-
     val userRepository: UserRepository = mockk()
     val userDetailsManager: UserDetailsManager = mockk()
+    val authorityService: AuthorityService = mockk()
+    val passwordEncoder: PasswordEncoder = mockk()
     val userMapper: UserMapper = UserMapperImpl()
-    val passwordEncoder: PasswordEncoder = BCryptPasswordEncoder()
-    val userService: UserService = UserService(userRepository, userMapper, userDetailsManager, passwordEncoder)
+    val userService: UserService = UserService(userRepository, userMapper, userDetailsManager, passwordEncoder, authorityService)
 
     @Test
     fun whenGetAll_thenReturnListOfRecords() {
@@ -52,13 +54,13 @@ class UserServiceTest {
 
     @Test
     fun whenCreate_thenSaveRecordAndReturnRecord() {
-        val id = 1L
         val userReq = UserCreateRequest("test", "test")
-        val entity = User(id,"test", "test")
-        val userDetails = org.springframework.security.core.userdetails.User("test", "test", emptyList())
+        val entity = User("test", "test")
+        val authority = Authority("test", "ROLE_USER")
 
-        every { userDetailsManager.createUser(userDetails) } returns Unit
-        every { userRepository.findByUsername("test") } returns entity
+        every { passwordEncoder.encode("test") } returns "test"
+        every { userRepository.save(entity) } returns entity
+        every { authorityService.createForUser("test") } returns CompletableFuture.completedFuture(authority)
 
         val created = userService.create(userReq)
 
@@ -75,6 +77,7 @@ class UserServiceTest {
         val u2 = User(id, "user1", "test", false )
 
 
+        every { passwordEncoder.encode("test") } returns "test"
         every { userRepository.findByIdOrNull(id) } returns u1
         every { userRepository.save(u1) } returns u2
         val updated = userService.update(id, userReq)
