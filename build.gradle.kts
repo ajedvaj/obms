@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "3.2.3"
 	id("io.spring.dependency-management") version "1.1.4"
+	id("com.palantir.docker") version "0.36.0"
+	id("com.palantir.docker-run") version "0.35.0"
 	kotlin("jvm") version "1.9.22"
 	kotlin("plugin.spring") version "1.9.22"
 	kotlin("plugin.jpa") version "1.9.22"
@@ -60,4 +62,16 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+docker {
+	name = "obms:${version}".lowercase()
+	files(file("build/libs/obms-${version}.jar"))
+}
+
+dockerRun {
+	name = "obms"
+	image = "obms:${version}".lowercase()
+	clean = true
+	ports("8080:8080")
 }
