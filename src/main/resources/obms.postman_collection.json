@@ -82,11 +82,26 @@
 				{
 					"name": "users - update",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "test11",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "test",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"password\": \"test22\"\n}",
+							"raw": "{\n    \"password\": \"test33\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -213,36 +228,6 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"title\":\"The Hobbit\",\n    \"author\":\"J.R.R. Tolkien\",\n    \"genre\":\"FANTASY2\",\n    \"price\":10.99,\n    \"availability\":true\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/books/5",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"books",
-								"5"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "books - partial update",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"genre\":\"FANTASY\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

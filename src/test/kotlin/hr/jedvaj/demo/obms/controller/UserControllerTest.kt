@@ -2,10 +2,8 @@ package hr.jedvaj.demo.obms.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
-import hr.jedvaj.demo.obms.model.request.BookRequest
 import hr.jedvaj.demo.obms.model.request.UserCreateRequest
 import hr.jedvaj.demo.obms.model.request.UserUpdateRequest
-import hr.jedvaj.demo.obms.model.response.BookResponse
 import hr.jedvaj.demo.obms.model.response.UserResponse
 import hr.jedvaj.demo.obms.service.UserService
 import io.mockk.every

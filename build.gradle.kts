@@ -31,9 +31,10 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.liquibase:liquibase-core")
 
-
 	implementation("org.mapstruct:mapstruct:1.5.2.Final")
 	kapt("org.mapstruct:mapstruct-processor:1.5.2.Final")
+
+	implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
 
 	runtimeOnly("com.h2database:h2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
