@@ -11,7 +11,7 @@ import java.util.*
 
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
-class JpaAuditConfiguration {
+class JpaAuditConfig {
 
     @Bean
     fun auditorProvider(): AuditorAware<String> {
