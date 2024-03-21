@@ -18,7 +18,8 @@ class UserService(
     val userMapper: UserMapper,
     val userDetailsManager: UserDetailsManager,
     val passwordEncoder: PasswordEncoder,
-    val authorityService: AuthorityService
+    val authorityService: AuthorityService,
+    val emailService: EmailService
 ) {
     val logger = KotlinLogging.logger {}
 
@@ -43,7 +44,9 @@ class UserService(
         val user = User(userCreateRequest.username, password)
 
         val entity = userRepository.save(user)
-        val future = authorityService.createForUser(user.username)
+        authorityService.createForUser(user.username)
+
+        val future = emailService.sendEmail(entity.username)
         future.thenAccept {
             logger.info { "For demo purpose example of processing async result" }
         }

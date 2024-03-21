@@ -25,13 +25,15 @@ class UserServiceTest {
     val userDetailsManager: UserDetailsManager = mockk()
     val authorityService: AuthorityService = mockk()
     val passwordEncoder: PasswordEncoder = mockk()
+    val emailService: EmailService = mockk()
     val userMapper: UserMapper = UserMapperImpl()
-    val userService: UserService = UserService(userRepository, userMapper, userDetailsManager, passwordEncoder, authorityService)
+    val userService: UserService =
+        UserService(userRepository, userMapper, userDetailsManager, passwordEncoder, authorityService, emailService)
 
     @Test
     fun whenGetAll_thenReturnListOfRecords() {
-        val u1 = User(1, "user1", "user1", true )
-        val u2 = User(2, "user2", "user2", true )
+        val u1 = User(1, "user1", "user1", true)
+        val u2 = User(2, "user2", "user2", true)
 
         every { userRepository.findAll() } returns listOf(u1, u2)
         val result = userService.getAll()
@@ -43,7 +45,7 @@ class UserServiceTest {
     @Test
     fun whenGetOne_thenReturnOneRecord() {
         val id = 1L
-        val u1 = User(1, "user1", "user1", true )
+        val u1 = User(1, "user1", "user1", true)
 
         every { userRepository.findByIdOrNull(id) } returns u1
         val result = userService.getOne(id)
@@ -60,7 +62,8 @@ class UserServiceTest {
 
         every { passwordEncoder.encode("test") } returns "test"
         every { userRepository.save(entity) } returns entity
-        every { authorityService.createForUser("test") } returns CompletableFuture.completedFuture(authority)
+        every { authorityService.createForUser("test") } returns authority
+        every { emailService.sendEmail("test") } returns CompletableFuture.completedFuture(true)
 
         val created = userService.create(userReq)
 
@@ -73,8 +76,8 @@ class UserServiceTest {
     fun whenUpdate_thenUpdateRecordAndReturnRecord() {
         val id = 1L
         val userReq = UserUpdateRequest("test", null)
-        val u1 = User(id, "user1", "user1", true )
-        val u2 = User(id, "user1", "test", false )
+        val u1 = User(id, "user1", "user1", true)
+        val u2 = User(id, "user1", "test", false)
 
 
         every { passwordEncoder.encode("test") } returns "test"

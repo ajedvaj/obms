@@ -12,13 +12,11 @@ import java.util.concurrent.CompletableFuture
 class AuthorityService(val authorityRepository: AuthorityRepository) {
 
     val logger = KotlinLogging.logger {}
-    @Async
-    fun createForUser(username: String): CompletableFuture<Authority> {
+    fun createForUser(username: String): Authority {
         logger.debug { "Received call to ${AuthorityService::class.simpleName} with param username: $username" }
-        logger.info { "For demo purpose example of @Async method" }
 
         val authority = Authority(username, SecurityRoles.ROLE_USER.name)
         val entity = authorityRepository.save(authority)
-        return CompletableFuture.completedFuture(entity)
+        return entity
     }
 }
